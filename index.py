@@ -16,10 +16,10 @@ def change_random_bit(data):
     return bytes.fromhex("".join("0123456789abcdef"[val] for val in values))
 
 
-msg = 'Two One Nine Two'
+msg = 'two one two nine'
 encode = '__all__'
 print('AES 128')
-key = 'Thats my Kung Fu'    # 16 character / 128 bits
+key = 'checking my aes1'
 encrypt_128 = AES_128()
 x = encrypt_128.encrypt(key, msg, encode)
 y = encrypt_128.decrypt(key, x['hex'])
@@ -46,7 +46,7 @@ print(y, end='\n\n')
 
 
 print('AES 192')
-key = 'Thats my Kung Fu Panda !'    # 24 character / 192 bits
+key = 'checking myaes on python'
 encrypt_192 = AES_192()
 x = encrypt_192.encrypt(key, msg, encode)
 y = encrypt_192.decrypt(key, x['hex'])
@@ -73,7 +73,7 @@ print(y, end='\n\n')
 
 
 print('AES 256')
-key = 'Thats my Kung Fu Panda ! Style12'    # 32 character / 256 bits
+key = 'checking myaes on python atempt1'    # 32 character / 256 bits
 encrypt_256 = AES_256()
 x = encrypt_256.encrypt(key, msg, encode)
 y = encrypt_256.decrypt(key, x['hex'])

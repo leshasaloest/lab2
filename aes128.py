@@ -15,7 +15,7 @@ class AES:
     def __keySchedule(self, KEY):
         hexKey = keyToHexArray(KEY)
         self.ROUNDKEY.append(hexKey)
-        for i in range(0, self.ROUND):
+        for i in range(self.ROUND):
             prev_arr = self.ROUNDKEY[-1]
             last_col = prev_arr[self.ORDER-1]
             shift_col = arrayShift(last_col)
@@ -46,7 +46,7 @@ class AES:
         bytes = 16
         bits_arr = []
         while(True):
-            if(len(data) > bytes):
+            if len(data) > bytes:
                 bits_arr.append(data[:bytes])
                 data = data[bytes:]
             else:
@@ -64,7 +64,7 @@ class AES:
             arr = shiftRow(arr, left=False)
             arr = subBytes(arr, inverse=True)
             arr = addRoundKey(arr, self.ROUNDKEY[i])
-            if(i != 0):
+            if i != 0:
                 arr = inverseMixColumn(arr)
             plain_arr = arr
         return plain_arr
@@ -72,10 +72,10 @@ class AES:
     # Decryption Delete Padding
     def __delPadding(self, data):
         verify = data[-1]
-        if(verify >= 1 and verify <= 15):
+        if verify >= 1 and verify <= 15:
             pad = data[16-verify:]
             sameCount = pad.count(verify)
-            if(sameCount == verify):
+            if sameCount == verify:
                 return data[:16-verify]
             return data
         return data
@@ -89,14 +89,14 @@ class AES:
             cipher_matrix = self.__encryptProcess(i)
             cipher_text = list(np.array(cipher_matrix).reshape(-1,))
             for j in cipher_text:
-                hex_ecrypt+=f'{j:02x}'
+                hex_ecrypt += f'{j:02x}'
         self.ROUNDKEY = []
         #conversion
-        if(type == 'b64'):
+        if type == 'b64':
             return b64encode(bytes.fromhex(hex_ecrypt)).decode()
-        if(type == '0b'):
+        if type == '0b':
             return f'{int(hex_ecrypt, 16):0>b}'
-        if(type == '__all__'):
+        if type == '__all__':
             return {
                 'hex': hex_ecrypt,
                 'b64': b64encode(bytes.fromhex(hex_ecrypt)).decode(),
@@ -110,21 +110,21 @@ class AES:
             self.__keySchedule(KEY)
             data = ''
 
-            if(type == 'b64'):
+            if type == 'b64':
                 CIPHER = b64decode(CIPHER).hex()
 
-            if(type == '0b'):
+            if type == '0b':
                 CIPHER = hex(int(CIPHER, 2)).replace('0x','')
 
-            if(len(CIPHER) % 32 == 0 and len(CIPHER) > 0):
+            if len(CIPHER) % 32 == 0 and len(CIPHER) > 0:
                 examine = CIPHER
-                while(len(examine) != 0):
+                while len(examine) != 0:
                     plain_matrix = self.__decryptProcess(examine[:32])
                     plain_arr = list(np.array(plain_matrix).reshape(-1,))
                     plain_arr = self.__delPadding(plain_arr)
                     for j in plain_arr:
                         data+=chr(j)
-                    if(len(examine)==32):
+                    if len(examine)==32:
                         examine=''
                     else:
                         examine=examine[32:]
@@ -138,25 +138,24 @@ class AES:
             raise Exception(f"type := ['hex', '0b', 'b64'] but got '{type}'")
 
 
-if(__name__ == '__main__'):
+if __name__ == '__main__':
 
     aes128 = AES()
-
-    key = 'Thats my Kung Fu'
-    msg = 'Checking AES 128 on Python'
-    encode = '__all__'      # hex, b64 => base64, 0b => binary
-
-    x = aes128.encrypt(key, msg, encode)
-    print(x)
-
-    # decode from binary
-    y = aes128.decrypt(key, x['0b'], '0b')
-    print(y)
-
-    # decode from base64
-    y = aes128.decrypt(key, x['b64'], 'b64')
-    print(y)
-
-    # decode from hex (default)
-    y = aes128.decrypt(key, x['hex'])
-    print(y)
+    # key = 'Thats my Kung Fu'
+    # msg = 'Checking AES 128 on Python'
+    # encode = '__all__'      # hex, b64 => base64, 0b => binary
+    #
+    # x = aes128.encrypt(key, msg, encode)
+    # print(x)
+    #
+    # # decode from binary
+    # y = aes128.decrypt(key, x['0b'], '0b')
+    # print(y)
+    #
+    # # decode from base64
+    # y = aes128.decrypt(key, x['b64'], 'b64')
+    # print(y)
+    #
+    # # decode from hex (default)
+    # y = aes128.decrypt(key, x['hex'])
+    # print(y)

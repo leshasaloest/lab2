@@ -151,7 +151,7 @@ class AES:
             raise Exception(f"type := ['hex', '0b', 'b64'] but got '{type}'")
 
 
-if (__name__ == '__main__'):
+if __name__ == '__main__':
     aes192 = AES()
 
     key = 'Thats my Kung Fu12345678'

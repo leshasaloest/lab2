@@ -25,8 +25,6 @@ class AES:
             col_2 = xorArray(col_1, prev_arr[1])
             col_3 = xorArray(col_2, prev_arr[2])
             col_4 = xorArray(col_3, prev_arr[3])
-            # additional non-linear transformation after the fourth column
-            # https://crypto.stackexchange.com/questions/20/what-are-the-practical-differences-between-256-bit-192-bit-and-128-bit-aes-enc#answer-1527
             col_5 = xorArray(arraySbox(np.copy(col_4)), prev_arr[4])
             col_6 = xorArray(col_5, prev_arr[5])
             col_7 = xorArray(col_6, prev_arr[6])
@@ -51,7 +49,7 @@ class AES:
             arr = cipher_arr
             arr = subBytes(arr)
             arr = shiftRow(arr)
-            if (i != self.ROUND):
+            if i != self.ROUND:
                 arr = mixColumn(arr)
             arr = addRoundKey(arr, self.ROUNDKEY[i])
             cipher_arr = arr
@@ -62,7 +60,7 @@ class AES:
         bytes = 16
         bits_arr = []
         while (True):
-            if (len(data) > bytes):
+            if len(data) > bytes:
                 bits_arr.append(data[:bytes])
                 data = data[bytes:]
             else:
@@ -80,7 +78,7 @@ class AES:
             arr = shiftRow(arr, left=False)
             arr = subBytes(arr, inverse=True)
             arr = addRoundKey(arr, self.ROUNDKEY[i])
-            if (i != 0):
+            if i != 0:
                 arr = inverseMixColumn(arr)
             plain_arr = arr
         return plain_arr
